@@ -1,4 +1,4 @@
-getsymbols  NVDA AAPL MSFT F OXY , clear
+getsymbols AAPL AMD F HPE MSFT MU NVDA OXY, clear
 rename daten date
 gen year = year(date)
 order year, after(date)
@@ -6,11 +6,11 @@ replace period = month(date)
 order period, after(date)
 format %9.0g period
 tsset date
-
+format %tdMonth_dd,_CCYY date
 
 sort date
 
-local stocks "NVDA HPE AAPL MSFT F OXY"
+local stocks "AAPL AMD F HPE MSFT MU NVDA OXY"
 
 foreach stock of local stocks {
     * Calculate the daily price change in percentage
@@ -72,3 +72,7 @@ gen buy = 30
 gen sell = 70
 
 export delimited using "C:\Users\jkemper\OneDrive - Texas Tech University\Git\JARSTCO\data\RSI_valuations.csv", replace
+
+
+
+
