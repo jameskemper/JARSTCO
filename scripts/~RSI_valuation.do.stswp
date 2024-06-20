@@ -68,4 +68,7 @@ foreach stock of local stocks {
     drop gain_`stock' loss_`stock' mean_gain_`stock' mean_loss_`stock' rs_`stock' price_change_`stock'
 }
 
+gen buy = 30
+gen sell = 70
+
 export delimited using "C:\Users\jkemper\OneDrive - Texas Tech University\Git\JARSTCO\data\RSI_valuations.csv", replace
