@@ -68,11 +68,28 @@ foreach stock of local stocks {
     drop gain_`stock' loss_`stock' mean_gain_`stock' mean_loss_`stock' rs_`stock' price_change_`stock'
 }
 
+* Create buy/sell RSI thr
 gen buy = 30
 gen sell = 70
 
 export delimited using "C:\Users\jkemper\OneDrive - Texas Tech University\Git\JARSTCO\data\RSI_valuations.csv", replace
 
+*RSI Graphs 
+
+twoway (line rsi_AAPL date if year > 2022) (line buy date if year > 2022, yaxis(2) lcolor(green)) (line sell date if year > 2022, yaxis(2) lcolor(red)), title(AAPL Relative Strength Index (RSI)) ytitle(, color(%0)) xtitle(, color(%0))
+graph export "C:\Users\jkemper\OneDrive - Texas Tech University\Git\JARSTCO\graphs\AAPL_rsi.jpg", as(jpg) name("Graph") quality(100) replace
+twoway (line rsi_AMD date if year > 2022) (line buy date if year > 2022, yaxis(2) lcolor(green)) (line sell date if year > 2022, yaxis(2) lcolor(red)), title(AMD Relative Strength Index (RSI)) ytitle(, color(%0)) xtitle(, color(%0))
+graph export "C:\Users\jkemper\OneDrive - Texas Tech University\Git\JARSTCO\graphs\AMD_rsi.jpg", as(jpg) name("Graph") quality(100) replace
+twoway (line rsi_F date if year > 2022) (line buy date if year > 2022, yaxis(2) lcolor(green)) (line sell date if year > 2022, yaxis(2) lcolor(red)), title(F Relative Strength Index (RSI)) ytitle(, color(%0)) xtitle(, color(%0))
+graph export "C:\Users\jkemper\OneDrive - Texas Tech University\Git\JARSTCO\graphs\F_rsi.jpg", as(jpg) name("Graph") quality(100) replace
+twoway (line rsi_HPE date if year > 2022) (line buy date if year > 2022, yaxis(2) lcolor(green)) (line sell date if year > 2022, yaxis(2) lcolor(red)), title(HPE Relative Strength Index (RSI)) ytitle(, color(%0)) xtitle(, color(%0))
+graph export "C:\Users\jkemper\OneDrive - Texas Tech University\Git\JARSTCO\graphs\HPE_rsi.jpg", as(jpg) name("Graph") quality(100) replace
+twoway (line rsi_MSFT date if year > 2022) (line buy date if year > 2022, yaxis(2) lcolor(green)) (line sell date if year > 2022, yaxis(2) lcolor(red)), title(MSFT Relative Strength Index (RSI)) ytitle(, color(%0)) xtitle(, color(%0))
+graph export "C:\Users\jkemper\OneDrive - Texas Tech University\Git\JARSTCO\graphs\MSFT_rsi.jpg", as(jpg) name("Graph") quality(100) replace
+twoway (line rsi_NVDA date if year > 2022) (line buy date if year > 2022, yaxis(2) lcolor(green)) (line sell date if year > 2022, yaxis(2) lcolor(red)), title(NVDA Relative Strength Index (RSI)) ytitle(, color(%0)) xtitle(, color(%0))
+graph export "C:\Users\jkemper\OneDrive - Texas Tech University\Git\JARSTCO\graphs\NVDA_rsi.jpg", as(jpg) name("Graph") quality(100) replace
+twoway (line rsi_OXY date if year > 2022) (line buy date if year > 2022, yaxis(2) lcolor(green)) (line sell date if year > 2022, yaxis(2) lcolor(red)), title(OXY Relative Strength Index (RSI)) ytitle(, color(%0)) xtitle(, color(%0))
+graph export "C:\Users\jkemper\OneDrive - Texas Tech University\Git\JARSTCO\graphs\OXY_rsi.jpg", as(jpg) name("Graph") quality(100) replace
 
 
 
