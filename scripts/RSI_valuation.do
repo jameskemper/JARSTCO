@@ -1,4 +1,4 @@
-getsymbols AAPL AMD F HPE MSFT MU NVDA OXY, clear
+getsymbols AAPL AMD F HPE KOS MSFT MU NVDA OXY, clear
 rename daten date
 gen year = year(date)
 order year, after(date)
@@ -10,7 +10,7 @@ format %tdMonth_dd,_CCYY date
 
 sort date
 
-local stocks "AAPL AMD F HPE MSFT MU NVDA OXY"
+local stocks "AAPL AMD F HPE KOS MSFT MU NVDA OXY"
 
 foreach stock of local stocks {
     * Calculate the daily price change in percentage
@@ -69,14 +69,14 @@ foreach stock of local stocks {
 }
 
 * Create buy/sell RSI threshold
-gen buy = 30
-gen sell = 70
+gen buy = 40
+gen sell = 60
 
 export delimited using "C:\Users\jkemper\OneDrive - Texas Tech University\Git\JARSTCO\data\RSI_valuations.csv", replace
 
 *RSI Graphs 
 
-twoway (line rsi_AAPL date if year > 2022) (line buy date if year > 2022, yaxis(2) lcolor(green)) (line sell date if year > 2022, yaxis(2) lcolor(red)), title(AAPL Relative Strength Index (RSI)) ytitle(, color(%0)) xtitle(, color(%0))
+twoway (line rsi_AAPL date if year > 2022) (line buy date if year > 2022, yaxis(2) lcolor(green)) (line sell date if year > 2022, yaxis(2) lcolor(red)), title(AAPL Relative Strength Index (RSI)) ytitle(, color(%0)) xtitle(, color(%0)) note(RSI of 40/60 equals buy/sell)
 graph export "C:\Users\jkemper\OneDrive - Texas Tech University\Git\JARSTCO\graphs\AAPL_rsi.jpg", as(jpg) name("Graph") quality(100) replace
 twoway (line rsi_AMD date if year > 2022) (line buy date if year > 2022, yaxis(2) lcolor(green)) (line sell date if year > 2022, yaxis(2) lcolor(red)), title(AMD Relative Strength Index (RSI)) ytitle(, color(%0)) xtitle(, color(%0))
 graph export "C:\Users\jkemper\OneDrive - Texas Tech University\Git\JARSTCO\graphs\AMD_rsi.jpg", as(jpg) name("Graph") quality(100) replace
