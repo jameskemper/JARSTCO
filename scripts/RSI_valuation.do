@@ -92,5 +92,8 @@ graph export "C:\Users\jkemper\OneDrive - Texas Tech University\Git\JARSTCO\grap
 twoway (line rsi_OXY date if year > 2022) (line buy_at date if year > 2022, yaxis(2) lcolor(green)) (line sell_at date if year > 2022, yaxis(2) lcolor(red)), title(OXY Relative Strength Index (RSI)) ytitle(, color(%0)) xtitle(, color(%0))
 graph export "C:\Users\jkemper\OneDrive - Texas Tech University\Git\JARSTCO\graphs\OXY_rsi.jpg", as(jpg) name("Graph") quality(100) replace
 
+gen t = _n
+egen max = max(t)
+graph bar (sum) rsi_AAPL rsi_AMD rsi_F rsi_HPE rsi_KOS rsi_MSFT rsi_MU rsi_NVDA rsi_OXY if t == max
 
 
