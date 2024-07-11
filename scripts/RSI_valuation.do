@@ -14,23 +14,31 @@ local stocks "AAPL AMD F HPE KOS MSFT MU NVDA OXY"
 
 foreach stock of local stocks {
     * Calculate the daily price change in percentage
-    gen price_change_`stock' = ((close_`stock' - open_`stock') / open_`stock') * 100
+    gen price_change_`stock' = (close_`stock' / close_`stock'[_n-1] - 1) * 100
     
     * Create gain and loss variables
-    gen gain_`stock' = cond(price_change_`stock' > 0, price_change_`stock', 0)
-    gen loss_`stock' = cond(price_change_`stock' < 0, -price_change_`stock', 0)
+    gen gain_`stock' = max(price_change_`stock', 0)
+    gen loss_`stock' = max(-price_change_`stock', 0)
     
-    * Calculate the rolling mean for gains and losses over 14 periods
-    tssmooth ma mean_gain_`stock' = gain_`stock', window(14) 
-    tssmooth ma mean_loss_`stock' = loss_`stock', window(14) 
+    * Initialize mean gain and mean loss
+    gen mean_gain_`stock' = .
+    gen mean_loss_`stock' = .
+    replace mean_gain_`stock' = sum(gain_`stock') / 14 if _n == 14
+    replace mean_loss_`stock' = sum(loss_`stock') / 14 if _n == 14
+    
+    * Calculate the rolling mean for gains and losses using Wilder's method
+    replace mean_gain_`stock' = (mean_gain_`stock'[_n-1] * 13 + gain_`stock') / 14 if _n > 14
+    replace mean_loss_`stock' = (mean_loss_`stock'[_n-1] * 13 + loss_`stock') / 14 if _n > 14
     
     * Calculate RS (Relative Strength)
     gen rs_`stock' = mean_gain_`stock' / mean_loss_`stock'
+    replace rs_`stock' = 100 if mean_loss_`stock' == 0 & mean_gain_`stock' > 0
+    replace rs_`stock' = 0 if mean_loss_`stock' == 0 & mean_gain_`stock' == 0
     
     * Calculate RSI
-    gen rsi_`stock' = 100 - (100 / (1 + rs_`stock'))
+    gen rsi_`stock' = 100 * mean_gain_`stock' / (mean_gain_`stock' + mean_loss_`stock')
     
-    * Generate buy_at/sell_at signals
+        * Generate buy_at/sell_at signals
     gen signal_`stock' = 0
     replace signal_`stock' = 1 if rsi_`stock' < 30  
     replace signal_`stock' = -1 if rsi_`stock' > 70  
@@ -61,11 +69,6 @@ foreach stock of local stocks {
             local buy_at_index = .
         }
     }
-}
-
-* Optional: Drop temporary variables (clean up)
-foreach stock of local stocks {
-    drop gain_`stock' loss_`stock' mean_gain_`stock' mean_loss_`stock' rs_`stock' price_change_`stock'
 }
 
 * Create buy_at/sell_at RSI threshold
